@@ -67,8 +67,10 @@ def plot_curve(X, y, model):
 
 # Model Instance
 polynomial_regression_model = PolynomialRegressionModel(2)
-polynomial_regression_model.train(X, y, EPOCHS = 10000000, learning_rate = 0.000001, verbose = 10)
+polynomial_regression_model.train(X, y, EPOCHS = 100000, learning_rate = 0.000001, verbose = 10)
 
 
 # Plotting to see the curve
 plot_curve(X, y, polynomial_regression_model)
+
+# Note : Training Time can be significantly reduced by normalizing the features.
