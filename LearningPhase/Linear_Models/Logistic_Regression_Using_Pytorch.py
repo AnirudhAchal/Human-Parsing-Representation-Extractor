@@ -23,7 +23,7 @@ class LogisticRegressionModel(torch.nn.Module):
         y_pred = self(X)
         y_pred = torch.where(y_pred >= 0.5, one, zero)
 
-        return torch.sum(y_pred == y).item() / m
+        return torch.sum(y_pred == y).item() / m * 100
 
     def get_accuracy(self, y_pred, y):
 
@@ -35,7 +35,7 @@ class LogisticRegressionModel(torch.nn.Module):
         zero = torch.zeros([m, 1])
 
         y_pred = torch.where(y_pred >= 0.5, one, zero)
-        return torch.sum(y_pred == y).item() / m
+        return torch.sum(y_pred == y).item() / m * 100
   
     def train(self, X, y, EPOCHS, learning_rate, verbose):
         criterion = torch.nn.BCELoss()
