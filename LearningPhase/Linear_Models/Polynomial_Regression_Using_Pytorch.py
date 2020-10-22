@@ -1,5 +1,6 @@
 # Importing Libraries
 import torch
+import math
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -68,6 +69,7 @@ def plot_curve(X, y, model):
 # Model Instance
 polynomial_regression_model = PolynomialRegressionModel(2)
 polynomial_regression_model.train(X, y, EPOCHS = 100000, learning_rate = 0.000001, verbose = 10)
+
 
 
 # Plotting to see the curve
