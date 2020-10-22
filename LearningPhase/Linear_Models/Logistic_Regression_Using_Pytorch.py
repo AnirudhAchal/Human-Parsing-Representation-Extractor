@@ -38,7 +38,7 @@ class LogisticRegressionModel(torch.nn.Module):
         return torch.sum(y_pred == y).item() / m
   
     def train(self, X, y, EPOCHS, learning_rate, verbose):
-        criterion = torch.nn.BCELoss(size_average = False)
+        criterion = torch.nn.BCELoss()
         optimizer = torch.optim.Adam(self.parameters(), lr = learning_rate)
 
         for epoch in range(EPOCHS):
@@ -55,7 +55,7 @@ class LogisticRegressionModel(torch.nn.Module):
             if epoch % (EPOCHS // verbose) == 0: 
                 print(f"Epoch : {epoch} | loss : {loss} | accuracy : {accuracy}")
 
-        print(f"Epoch : {epoch} | loss : {loss} | accuracy : {accuracy}")
+        print(f"Epoch : {EPOCHS} | loss : {loss} | accuracy : {accuracy}")
 
 
 # Import Dataset
@@ -72,9 +72,6 @@ y = y.float()
 
 
 # Model Instance
+torch.manual_seed(0)
 logistic_regression_model = LogisticRegressionModel(2)
-logistic_regression_model.train(X, y, EPOCHS = 1000, learning_rate = 0.01, verbose = 10)
-
-for parameter in logistic_regression_model.parameters():
-    print(parameter)
-
+logistic_regression_model.train(X, y, EPOCHS = 2000, learning_rate = 0.01, verbose = 10)
