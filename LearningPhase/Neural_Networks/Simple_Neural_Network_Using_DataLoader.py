@@ -5,9 +5,9 @@ from torch.utils.data import Dataset, DataLoader
 # Const Variables
 FILE_NAME = "diabetes.csv"
 N_FEATURES = 8
-EPOCHS = 10000
+EPOCHS = 3000
 LEARNING_RATE = 0.01
-VERBOSE = 10
+VERBOSE = 30
 
 class DiabetesDataset(Dataset):
     def __init__(self):
@@ -60,7 +60,7 @@ class Net(torch.nn.Module):
 
         return torch.sum(y_pred == y).item() / m * 100
 
-    def train(self, data_loader, EPOCHS, learning_rate, verbose):
+    def train(self, data_set, data_loader, EPOCHS, learning_rate, verbose):
         criterion = torch.nn.BCELoss()
         optimizer = torch.optim.Adam(self.parameters(), lr = learning_rate)
 
@@ -79,10 +79,11 @@ class Net(torch.nn.Module):
                 loss.backward()
                 optimizer.step()
 
+            epoch_loss = criterion(self(data_set.x_data), data_set.y_data)
             if epoch % (EPOCHS // verbose) == 0:
-                print(f"Epoch : {epoch} | loss : {round(loss.item(), 5)}")
+                print(f"Epoch : {epoch} | loss : {round(epoch_loss.item(), 5)}")
 
-        print(f"Epoch : {EPOCHS} | loss : {round(loss.item(), 5)}") 
+        print(f"Epoch : {EPOCHS} | loss : {round(epoch_loss.item(), 5)}") 
         
 # Data Loader
 data = DiabetesDataset()
@@ -93,7 +94,7 @@ train_loader = DataLoader(dataset=data, batch_size=100, shuffle=True)
 torch.manual_seed(0)
 
 net = Net(N_FEATURES)
-net.train(train_loader, EPOCHS, LEARNING_RATE, VERBOSE)
+net.train(data, train_loader, EPOCHS, LEARNING_RATE, VERBOSE)
 
 accuracy = net.calculate_accuracy(data.x_data, data.y_data)
 print(f"\nModel accuracy after {EPOCHS} epochs : {round(accuracy, 2)}\n") 
