@@ -6,8 +6,7 @@ from torchvision import transforms, datasets
 import matplotlib.pyplot as plt
 
 # Const Variables
-N_FEATURES = 28 * 28
-EPOCHS = 20
+EPOCHS = 50
 LEARNING_RATE = 0.01
 VERBOSE = 10
 
