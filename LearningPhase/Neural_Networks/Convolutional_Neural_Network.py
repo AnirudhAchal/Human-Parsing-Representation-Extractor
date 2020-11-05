@@ -60,6 +60,7 @@ class Net(torch.nn.Module):
         total_count = 0
 
         for data in data_set:
+            # Unpack data
             X, y = data
 
             # Number of training examples 
@@ -98,23 +99,23 @@ class Net(torch.nn.Module):
             if epoch % (EPOCHS // verbose) == 0:
                 print(f"Epoch : {epoch} | loss : {round(loss.item(), 5)}")
 
-        if epoch % (EPOCHS // verbose) == 0:
-            print(f"Epoch : {epoch} | loss : {round(loss.item(), 5)}")
+        print(f"Epoch : {epoch} | loss : {round(loss.item(), 5)}")
         
-# Import Data
-train_set, test_set = import_data()
 
-# Model Instance
-torch.manual_seed(0)
+if __name__ == '__main__':
+    # Import Data
+    train_set, test_set = import_data()
 
-net = Net()
-net.train(train_set, EPOCHS, LEARNING_RATE, VERBOSE)
+    # Model Instance
+    torch.manual_seed(0)
+    net = Net()
+    net.train(train_set, EPOCHS, LEARNING_RATE, VERBOSE)
 
-train_accuracy = net.calculate_accuracy(train_set)
-print(f"Train accuracy after {EPOCHS} epochs : {round(train_accuracy, 4)}")
+    train_accuracy = net.calculate_accuracy(train_set)
+    print(f"Train accuracy after {EPOCHS} epochs : {round(train_accuracy, 4)}")
 
-test_accuracy = net.calculate_accuracy(test_set)
-print(f"Test accuracy after {EPOCHS} epochs : {round(test_accuracy, 4)}")
+    test_accuracy = net.calculate_accuracy(test_set)
+    print(f"Test accuracy after {EPOCHS} epochs : {round(test_accuracy, 4)}")
 
 
 
