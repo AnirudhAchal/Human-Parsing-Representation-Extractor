@@ -5,10 +5,12 @@ from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
 import matplotlib.pyplot as plt
 
+
 # Const Variables
 EPOCHS = 50
 LEARNING_RATE = 0.01
 VERBOSE = 10
+
 
 def import_data():
     train = datasets.MNIST("", train=True, download=True, 
@@ -19,9 +21,11 @@ def import_data():
     test_set = DataLoader(test, batch_size=256, shuffle=True)
     return train_set, test_set
 
+
 def plot_image(image):
     plt.imshow(image.view(28, 28))
     plt.show()
+
 
 class Net(torch.nn.Module):
     def __init__(self):

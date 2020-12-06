@@ -59,7 +59,6 @@ class DenseBlock(torch.nn.Module):
         # Layer 3
         X = self.conv3(X)
         X = self.bn3(X)
-        X_layer3 = X # Storing Layer 3 output
         X = X + X_in + X_layer1 + X_layer2 # Dense Connection 3
         X = torch.relu(X)
 
