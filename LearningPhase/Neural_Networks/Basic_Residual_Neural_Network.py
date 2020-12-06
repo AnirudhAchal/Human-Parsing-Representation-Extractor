@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 
 
 # Const Variables
-EPOCHS = 10
+EPOCHS = 20
 LEARNING_RATE = 0.01
-VERBOSE = 10
+VERBOSE = 50
 
 
 def import_data():
@@ -109,7 +109,7 @@ class ConvBlock(nn.Module):
         return  X
 
 
-class ResNet50(torch.nn.Module):
+class ResNet(torch.nn.Module):
     def __init__(self):
         super().__init__()
 
@@ -127,8 +127,7 @@ class ResNet50(torch.nn.Module):
         self.stage3_fc = torch.nn.Linear(1024, 10)
 
     def forward(self, X):
-        # Stored for flattening later
-        batch_size = X.size(0)
+        batch_size = X.size(0) # Stored for flattening later
 
         # Stage 1
         X = self.stage1_conv1(X)
@@ -201,7 +200,7 @@ if __name__ == '__main__':
 
     # Model Instance
     torch.manual_seed(0)
-    resnet = ResNet50()
+    resnet = ResNet()
     resnet.train(train_set, EPOCHS, LEARNING_RATE, VERBOSE)
 
     train_accuracy = resnet.calculate_accuracy(train_set)
