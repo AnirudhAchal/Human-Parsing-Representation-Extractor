@@ -89,6 +89,8 @@ class Net(torch.nn.Module):
 
                 # Forward Pass
                 y_pred = self(X)
+                print(y_pred, y)
+                exit(0)
                 loss = F.nll_loss(y_pred, y)
 
                 # Backward Pass
