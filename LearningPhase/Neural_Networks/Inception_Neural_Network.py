@@ -27,21 +27,21 @@ def plot_image(image):
     plt.show()
 
 
-class InceptionBlockA(torch.nn.Module):
-    def __init__(self, in_channels):
+class InceptionBlock(torch.nn.Module):
+    def __init__(self, in_channels, out_channels):
         super().__init__()
 
-        self.branch1_1x1 = nn.Conv2d(in_channels, 24, kernel_size=1)
+        self.branch1_1x1 = nn.Conv2d(in_channels, out_channels[0], kernel_size=1)
 
         self.branch2_mp = nn.MaxPool2d(kernel_size=3, padding=1, stride=1)
-        self.branch2_1x1 = nn.Conv2d(in_channels, 16, kernel_size=1)
+        self.branch2_1x1 = nn.Conv2d(in_channels, out_channels[1], kernel_size=1)
 
-        self.branch3_1x1 = nn.Conv2d(in_channels, 16, kernel_size=1)
-        self.branch3_5x5 = nn.Conv2d(16, 24, kernel_size=5, padding=2)
+        self.branch3_1x1 = nn.Conv2d(in_channels, out_channels[2], kernel_size=1)
+        self.branch3_5x5 = nn.Conv2d(out_channels[2], out_channels[3], kernel_size=5, padding=2)
 
-        self.branch4_1x1 = nn.Conv2d(in_channels, 16, kernel_size=1)
-        self.branch4_3x3_1 = nn.Conv2d(16, 24, kernel_size=3, padding=1)
-        self.branch4_3x3_2 = nn.Conv2d(24, 24, kernel_size=3, padding=1)
+        self.branch4_1x1 = nn.Conv2d(in_channels, out_channels[4], kernel_size=1)
+        self.branch4_3x3_1 = nn.Conv2d(out_channels[4], out_channels[5], kernel_size=3, padding=1)
+        self.branch4_3x3_2 = nn.Conv2d(out_channels[5], out_channels[6], kernel_size=3, padding=1)
 
     def forward(self, X):
         X_branch1 = self.branch1_1x1(X)
@@ -63,7 +63,7 @@ class InceptionBlockA(torch.nn.Module):
 
         return output
 
-class InceptionBlockB(torch.nn.Module):
+class InceptionBlockA(torch.nn.Module):
     def __init__(self, in_channels):
         super().__init__()
 
@@ -133,10 +133,10 @@ class InceptionV3(torch.nn.Module):
         self.stage1_bn2 = nn.BatchNorm2d(32)
 
         self.stage2_mp = nn.MaxPool2d(kernel_size=3, stride=1, padding=1)
-        self.stage2_IBA_1 = InceptionBlockA(32)
-        self.stage2_IBA_2 = InceptionBlockA(88)
+        self.stage2_IBA_1 = InceptionBlock(32, [24, 16, 16, 24, 16, 24, 24])
+        self.stage2_IBA_2 = InceptionBlock(88, [24, 16, 16, 24, 16, 24, 24])
 
-        self.stage3_IBA_1 = InceptionBlockA(88)
+        self.stage3_IBA_1 = InceptionBlock(88, [24, 16, 16, 24, 16, 24, 24])
 
         self.stage4_ag = nn.AvgPool2d(2)
         self.stage4_fc = nn.Linear(2200, 10)
@@ -209,15 +209,17 @@ class InceptionV3(torch.nn.Module):
 
                 # Side Block 1 loss
                 loss1 = F.nll_loss(y_pred1, y)
-                optimizer.zero_grad()
-                loss1.backward()
-                optimizer.step()        
-                
-                # Main loss
-                loss = F.nll_loss(y_pred, y)
+                loss2 = F.nll_loss(y_pred, y)
+                loss = loss1 + loss2
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()        
+                
+                # Main loss
+                """loss = F.nll_loss(y_pred, y)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()        """
 
 
             if epoch % (EPOCHS // verbose) == 0:
