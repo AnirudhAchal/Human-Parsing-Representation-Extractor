@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 # Const Variables
 EPOCHS = 10
-LEARNING_RATE = 0.01
+LEARNING_RATE = 0.001
 VERBOSE = 10
 
 
