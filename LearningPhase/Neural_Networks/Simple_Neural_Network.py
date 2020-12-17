@@ -50,7 +50,6 @@ class Net(torch.nn.Module):
         for epoch in range(EPOCHS):
             # Forward Pass
             y_pred = self(X)
-            print(y_pred.shape, X.shape, y.shape)
             accuracy = self.calculate_accuracy(X, y)
             loss = criterion(y_pred, y)
 
